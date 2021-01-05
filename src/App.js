@@ -1,6 +1,22 @@
 import React, { Component } from "react";
 import "./App.css";
 import Person from "./Person/Person";
+// import Radium, {StyleRoot} from 'radium';
+import styled from 'styled-components';
+
+const StyledBtn = styled.button`
+  background-color: ${props => !props.showPersons ? 'green' : 'red'};
+  color: white;
+  font: inherit;
+  border: 1px solid blue;
+  padding: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${props => !props.showPersons ? 'lightgreen' : 'salmon'};
+    color: black;
+  }
+`
 
 class App extends Component {
   state = {
@@ -15,27 +31,6 @@ class App extends Component {
     showPerson: false,
   };
 
-  // switchNameHandler = (newName) => {
-  //   this.setState( {
-  //     Person: [
-  //       {name: newName},
-  //       {name: 'Akash'},
-  //       {name: 'Boss'}
-  //     ],
-  //     speedo: {
-  //       name: ['name', 'new object']
-  //     }
-  //   } )
-  // }
-  // switchAgeHandler = (newAge) => {
-  //   this.setState({
-  //     Person: [
-  //       {age: newAge},
-  //       {age: newAge},
-  //       {age: 18}
-  //     ]
-  //   })
-  // }
   deletePersonHandler = (personIndex) => {
     const newPersons = [...this.state.Persons];
     newPersons.splice(personIndex, 1);
@@ -43,16 +38,16 @@ class App extends Component {
   };
 
   nameChangeHandler = (event, id) => {
-    const personIndex = this.state.Persons.findIndex((p) => {
-      console.log(id, p);
-      return p.id === id;
-    });
+    // const personIndex = this.state.Persons.findIndex((p) => {
+    //   console.log(id, p.id);
+    //   return p.id === id;
+    // });
     const person = {
-      ...this.state.Persons[personIndex],
+      ...this.state.Persons[id - 1],
     };
     person.name = event.target.value;
     const persons = [...this.state.Persons];
-    persons[personIndex] = person;
+    persons[id - 1] = person;
     this.setState({ Persons: persons });
   };
 
@@ -66,12 +61,21 @@ class App extends Component {
     border: "10px solid green",
   };
   render() {
-    const style = {
-      backgroundColor: "blue",
-    };
-    const style1 = {
-      border: "10px solid green",
-    };
+    // const style = {
+    //   backgroundColor: "green",
+    //   color: 'white',
+    //   font: 'inherit',
+    //   border: '1px solid blue',
+    //   padding: '8px',
+    //   cursor: 'pointer',
+    //   ':hover': {
+    //     backgroundColor: 'lightgreen',
+    //     color: 'black'
+    //   }
+    // };
+    // const style1 = {
+    //   border: "10px solid green",
+    // };
 
     let persons = null;
     if (this.state.showPerson) {
@@ -89,33 +93,38 @@ class App extends Component {
               />
             );
           })}
-          {/* <Person name={this.state.Persons[0].name}
-            age={this.state.Persons[0].age}
-            change={this.nameChangeHandler} />
-          <Person name={this.state.Persons[1].name}
-            age={this.state.Persons[1].age}/>
-          
-          <Person name={this.state.Persons[2].name}
-            age={this.state.Persons[2].age}
-            change={this.nameChangeHandler}>
-              Both children and argument can coexist
-          </Person> */}
         </div>
       );
+      // style.backgroundColor = 'red';
+      // style[':hover'] = {
+      //   backgroundColor: 'salmon',
+      //   color: 'black'
+      // }
+    }
+
+    const Classes = []
+    if (this.state.Persons.length <= 2) {
+      Classes.push('red')
+    }
+    if (this.state.Persons.length <= 1) {
+      Classes.push('bold')
     }
     return (
+      // <StyleRoot>
       <div className="App">
         <h1>Hi, I am prakash</h1>
-        <button style={style1} onClick={this.togglePersonHandler}>
+        <StyledBtn showPersons={this.state.showPerson}onClick={this.togglePersonHandler}>
           Toggle Person
-        </button>
+        </StyledBtn>
+        <p className={Classes.join(' ')}>the className is dynamic</p>
         {persons}
       </div>
+     // {/* </StyleRoot> */}
     );
   }
 }
 
-export default App;
+export default (App);
 
 // const [personState, setPersonsState] = useState({
 //   Person: [
