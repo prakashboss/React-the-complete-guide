@@ -1,24 +1,30 @@
 import React, { Component } from "react";
-import "./App.css";
-import Person from "./Person/Person";
+import classes from "./App.css";
+import Persons from "../components/Persons/Persons";
+import Cockpit from "../components/Cockpit/Cockpit";
 // import Radium, {StyleRoot} from 'radium';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 
-const StyledBtn = styled.button`
-  background-color: ${props => !props.showPersons ? 'green' : 'red'};
-  color: white;
-  font: inherit;
-  border: 1px solid blue;
-  padding: 8px;
-  cursor: pointer;
+// const StyledBtn = styled.button`
+//   background-color: ${props => !props.showPersons ? 'green' : 'red'};
+//   color: white;
+//   font: inherit;
+//   border: 1px solid blue;
+//   padding: 8px;
+//   cursor: pointer;
 
-  &:hover {
-    background-color: ${props => !props.showPersons ? 'lightgreen' : 'salmon'};
-    color: black;
-  }
-`
+//   &:hover {
+//     background-color: ${props => !props.showPersons ? 'lightgreen' : 'salmon'};
+//     color: black;
+//   }
+// `
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    console.log("App.js from Constructor");
+  }
+
   state = {
     Persons: [
       { id: 1, name: "Prakash", age: 22 },
@@ -28,8 +34,21 @@ class App extends Component {
     speedo: {
       name: [],
     },
-    showPerson: false,
+    ShowPerson: false,
   };
+
+  componentDidMount() {
+    console.log('App.js componentDidMount')
+  }
+
+  // componentWillMount() {
+  //   console.log('App.js componentWillMount')
+  // }
+
+  static getDerivedStateFromProps(props, state) {
+    console.log("App.js from getDerivedStateFromProps", props);
+    return props;
+  }
 
   deletePersonHandler = (personIndex) => {
     const newPersons = [...this.state.Persons];
@@ -53,7 +72,7 @@ class App extends Component {
 
   togglePersonHandler = () => {
     this.setState({
-      showPerson: !this.state.showPerson,
+      ShowPerson: !this.state.ShowPerson,
     });
   };
 
@@ -78,9 +97,16 @@ class App extends Component {
     // };
 
     let persons = null;
-    if (this.state.showPerson) {
+
+    // console.log(btnClass)
+    if (this.state.ShowPerson) {
       persons = (
-        <div>
+        <Persons
+          persons={this.state.Persons}
+          Click={this.deletePersonHandler}
+          Change={this.nameChangeHandler}
+        />
+        /* <div>
           {this.state.Persons.map((person, index) => {
             // console.log(person)
             return (
@@ -93,38 +119,41 @@ class App extends Component {
               />
             );
           })}
-        </div>
+        </div> */
       );
       // style.backgroundColor = 'red';
       // style[':hover'] = {
       //   backgroundColor: 'salmon',
       //   color: 'black'
       // }
+      // btnClass = classes.Red;
+      // console.log(btnClass);
     }
 
-    const Classes = []
-    if (this.state.Persons.length <= 2) {
-      Classes.push('red')
-    }
-    if (this.state.Persons.length <= 1) {
-      Classes.push('bold')
-    }
+    // const assignedClasses = []
+    // if (this.state.Persons.length <= 2) {
+    //   assignedClasses.push(classes.red)
+    // }
+    // if (this.state.Persons.length <= 1) {
+    //   assignedClasses.push(classes.bold)
+    // }
     return (
       // <StyleRoot>
-      <div className="App">
-        <h1>Hi, I am prakash</h1>
-        <StyledBtn showPersons={this.state.showPerson}onClick={this.togglePersonHandler}>
-          Toggle Person
-        </StyledBtn>
-        <p className={Classes.join(' ')}>the className is dynamic</p>
+      <div className={classes.App}>
+        <Cockpit
+          title={this.props.title}
+          clicked={this.togglePersonHandler}
+          showPerson={this.state.ShowPerson}
+          Persons={this.state.Persons}
+        />
         {persons}
       </div>
-     // {/* </StyleRoot> */}
+      // {/* </StyleRoot> */}
     );
   }
 }
 
-export default (App);
+export default App;
 
 // const [personState, setPersonsState] = useState({
 //   Person: [
