@@ -1,19 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import classes from './Cockpit.css'
 
 
+
 const Cockpit = (props) => {
-  
+  useEffect(() => {
+    console.log("useEffect in Cockpit")
+    const Timer = setTimeout(() => {
+      alert('from settimeout inside useeffect inside settimeout')
+    }, 1000 ) 
+    return ( ) => {
+      clearTimeout(Timer)
+    }
+  },[props] )
+
   let btnClass = ' ';
   if (props.showPerson) {
     btnClass =classes.Red;  
   }
   
   const assignedClasses = []
-  if (props.Persons.length <= 2) {
+  if (props.personsLength <= 2) {
     assignedClasses.push(classes.red)
   }
-  if (props.Persons.length <= 1) {
+  if (props.personsLength <= 1) {
     assignedClasses.push(classes.bold)
   }
   return (
@@ -29,4 +39,4 @@ const Cockpit = (props) => {
 
 }
 
-export default Cockpit
+export default React.memo(Cockpit)

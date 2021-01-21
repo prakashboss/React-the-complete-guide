@@ -4,6 +4,8 @@ import Persons from "../components/Persons/Persons";
 import Cockpit from "../components/Cockpit/Cockpit";
 // import Radium, {StyleRoot} from 'radium';
 // import styled from 'styled-components';
+import WithClass from '../components/hoc/WithClass'
+import Aux from '../components/hoc/Auxiliary'
 
 // const StyledBtn = styled.button`
 //   background-color: ${props => !props.showPersons ? 'green' : 'red'};
@@ -35,10 +37,11 @@ class App extends Component {
       name: [],
     },
     ShowPerson: false,
+    ShowCockpit: true,
   };
 
   componentDidMount() {
-    console.log('App.js componentDidMount')
+    console.log("App.js componentDidMount");
   }
 
   // componentWillMount() {
@@ -139,21 +142,30 @@ class App extends Component {
     // }
     return (
       // <StyleRoot>
-      <div className={classes.App}>
-        <Cockpit
-          title={this.props.title}
-          clicked={this.togglePersonHandler}
-          showPerson={this.state.ShowPerson}
-          Persons={this.state.Persons}
-        />
+      <WithClass classes={classes.App}>
+        <button
+          onClick={() =>
+            this.setState({ ShowCockpit: !this.state.ShowCockpit })
+          }
+        >
+          toggle Cockpit
+        </button>
+        {this.state.ShowCockpit && (
+          <Cockpit
+            title={this.props.title}
+            clicked={this.togglePersonHandler}
+            showPerson={this.state.ShowPerson}
+            personsLength={this.state.Persons.length}
+          />
+        )}
         {persons}
-      </div>
+      </WithClass>
       // {/* </StyleRoot> */}
     );
   }
 }
 
-export default App;
+export default App
 
 // const [personState, setPersonsState] = useState({
 //   Person: [
